@@ -1,0 +1,16 @@
+{
+  "author": "Eric Zhang",
+  "name": "ascam",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ericz/ascam.git"
+  },
+  "engines": {
+    "node": "~v0.4.12"
+  },
+  "dependencies": {
+    "now": ""
+  },
+  "devDependencies": {}
+}
