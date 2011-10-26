@@ -25,7 +25,7 @@ app.get('/broadcast/:room', function(req, res){
 });
 
 
-app.listen(80);
+app.listen(8082);
 
 
 var nowjs = require('now');

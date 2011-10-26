@@ -10,7 +10,9 @@
     "node": "~v0.4.12"
   },
   "dependencies": {
-    "now": ""
+    "now": "",
+    "express": "",
+    "ejs": ""
   },
   "devDependencies": {}
 }
