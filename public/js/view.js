@@ -3,21 +3,20 @@ var last;
 var ascii;
 
 var broadcasting = false;
+var asciiWorker = new Worker("/js/jsascii.js");
+asciiWorker.onmessage = draw;
+var client = new BinaryClient('ws://localhost:9000');
+var stream;
+client.on('open', function(){
+  stream = client.createStream({room: room, type: 'read'});
+  stream.on('data', function(data) {
+    asciiWorker.postMessage(data);
+  });
+});
 
 $(document).ready(function(){
   last = document.getElementById('last');
   ascii = document.getElementById("ascii");
-  
-  now.receiveFrame = function(data) {
-    var asciiWorker = new Worker("/js/jsascii.js");
-    asciiWorker.onmessage = draw;
-    asciiWorker.postMessage(data);
-  }
-  
-  now.ready(function(){
-    now.joinRoom(room);
-  });
-  
 });
 
 function draw(event) {

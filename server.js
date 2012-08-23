@@ -28,19 +28,18 @@ app.get('/broadcast/:room', function(req, res){
 app.listen(8082);
 
 
-var nowjs = require('now');
+var BinaryServer = require('binaryjs').BinaryServer;
+var rooms = {};
 
-var everyone = nowjs.initialize(app);
-
-nowjs.on('connect', function(){
-  console.log(this.user.clientId, 'joined');
-
+// Start Binary.js server
+var server = BinaryServer({port: 9000});
+// Wait for new user connections
+server.on('connection', function(client){
+  client.on('stream', function(stream, meta){
+    if(meta.type == 'write') {
+      rooms[meta.room] = stream;
+    } else if (meta.type == 'read' && rooms[meta.room]) {
+      rooms[meta.room].pipe(stream);
+    }
+ });
 });
-
-everyone.now.sendFrame = function(data, room){
-  nowjs.getGroup(room).now.receiveFrame(data);
-}
-
-everyone.now.joinRoom = function(room) {
-  nowjs.getGroup(room).addUser(this.user.clientId);
-}

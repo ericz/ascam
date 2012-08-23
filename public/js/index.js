@@ -1,56 +1,40 @@
-var room;
-var last;
-var ascii;
+(function() {
 
-var broadcasting = false;
+	var timeouts = [],
+	    messageName = 'zero-timeout-message';
 
-$(document).ready(function(){
-  last = document.getElementById('last');
-  ascii = document.getElementById("ascii");
-  
-  now.receiveFrame = function(data) {
-    var asciiWorker = new Worker("js/jsascii.js");
-    asciiWorker.onmessage = draw;
-    asciiWorker.postMessage(data);
-  }
-  
-  $("#camera").webcam({
-    onSave: function(data) {
-      if(broadcasting) {
-        now.sendFrame(data, room);
-      }
-      var asciiWorker = new Worker("js/jsascii.js");
-      asciiWorker.onmessage = draw;
-      asciiWorker.postMessage(data);
-    },
-    onLoad: function(){webcam.save();}
-    
-  });
-  
-  
-  $("#startbtn").toggle(function(){
-    broadcasting = true;
-    $("#indicator").stop().animate({opacity: 0}, function(){
-      $("#btntext").text("Stop broadcasting");
-      $("#indicator").prop('src', '/images/green.png').animate({opacity: 1});
-    });
-  }, function(){
-    $("#indicator").stop().animate({opacity: 0}, function(){
-      $("#btntext").text("Start broadcasting");
-      $("#indicator").prop('src', '/images/red.png').animate({opacity: 1});
-    });
-    broadcasting = false;
-  });
-  
-});
+	// Like setTimeout, but only takes a function argument.  There's
+	// no time argument (always zero) and no arguments (you have to
+	// use a closure).
+	function setZeroTimeoutPostMessage(fn) {
+		timeouts.push(fn);
+		window.postMessage(messageName, '*');
+	}
 
-function draw(event) {
-  var strChars = event.data;
-  ascii.removeChild(last);
-  // can't get a span or div to flow like an img element, but a table works?
-  last = document.createElement("div");
-  last.innerHTML = strChars;
-  ascii.appendChild(last);
-  setTimeout(webcam.save, 500);
-} 
+	function setZeroTimeout(fn) {
+		setTimeout(fn, 0);
+	}
 
+	function handleMessage(event) {
+		if (event.source == window && event.data == messageName) {
+			if (event.stopPropagation) {
+				event.stopPropagation();
+			}
+			if (timeouts.length) {
+				timeouts.shift()();
+			}
+		}
+	}
+
+	if (window.postMessage) {
+		if (window.addEventListener) {
+			window.addEventListener('message', handleMessage, true);
+		} else if (window.attachEvent) {
+			window.attachEvent('onmessage', handleMessage);
+		}
+		window.setZeroTimeout = setZeroTimeoutPostMessage;
+	} else {
+		window.setZeroTimeout = setZeroTimeout;
+	}
+
+}());

@@ -4,32 +4,33 @@ var ascii;
 
 var broadcasting = false;
 var show = true;
+var asciiWorker = new Worker("/js/jsascii.js");
+asciiWorker.onmessage = draw;
+        
+var client = new BinaryClient('ws://localhost:9000');
+var stream;
+client.on('open', function(){
+  stream = client.createStream({room: room, type: 'write'});
+});
 
 $(document).ready(function(){
   last = document.getElementById('last');
   ascii = document.getElementById("ascii");
   
-  now.receiveFrame = function(data) {
-    var asciiWorker = new Worker("/js/jsascii.js");
-    asciiWorker.onmessage = draw;
-    asciiWorker.postMessage(data);
-  }
+
   
   $("#camera").webcam({
     onSave: function(data) {
-      if(broadcasting) {
-        now.sendFrame(data, room);
+      if(broadcasting && !stream.paused) {
+        stream.write(data);
       }
       if(show) {
-        var asciiWorker = new Worker("/js/jsascii.js");
-        asciiWorker.onmessage = draw;
         asciiWorker.postMessage(data);
       } else {
-        setTimeout(webcam.save, 500);
+        setZeroTimeout(webcam.save);
       }
     },
     onLoad: function(){webcam.save();}
-    
   });
   
   
@@ -64,6 +65,6 @@ function draw(event) {
   last = document.createElement("div");
   last.innerHTML = strChars;
   ascii.appendChild(last);
-  setTimeout(webcam.save, 500);
+  setZeroTimeout(webcam.save);
 } 
 
