@@ -10,9 +10,14 @@
     "node": "~v0.4.12"
   },
   "dependencies": {
-    "now": "",
-    "express": "",
+    "express": "2.5.11",
+    "binaryjs": "",
     "ejs": ""
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "scripts": {
+    "start": "node server.js"
+  },
+  "main": "server.js",
+  "license": "BSD"
 }
