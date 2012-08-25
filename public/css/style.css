@@ -11,6 +11,16 @@ a img {border: none;} /* Gets rid of IE's blue borders */
   visibility: hidden;
 }
 
+#home {
+  font-family: "Big Caslon", "Book Antiqua", "Palatino Linotype", Georgia, serif;
+  font-size: 16px;
+  color: #333;
+}
+
+#home h1 {
+  font-weight: normal;
+}
+
 #last {
   float: left;
   visibility: hidden;

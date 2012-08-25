@@ -1,7 +1,4 @@
 
-    var charList = [" ", ".", ",", ":", ";", "i", "1", "t", "f", "L", "C", "G", "0", "8", "@"];
-   
-    
 		var w = 100;
 		var h = 75;
 
@@ -25,11 +22,9 @@
           var g = b2 >> 4;
           var b = b2 & 15;
             
-          var char = charList[idx];
- 
           strChars += "<span style='"
-            + "color:rgb("+r*16+","+g*16+","+b*16+");"
-            + "'>" + char + char + "</span>";
+            + "background-color:rgb("+r*16+","+g*16+","+b*16+");"
+            + "'>&nbsp;&nbsp;</span>";
           
           //strChars += '(' + r + ',' + g +  ',' + b + ',' + idx + ')';
           //strChars += '(' + loc + ')';
