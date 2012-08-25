@@ -5,7 +5,7 @@ var ascii;
 var broadcasting = false;
 var asciiWorker = new Worker("/js/render.js");
 asciiWorker.onmessage = draw;
-var client = new BinaryClient('ws://'+window.location.hostname+':9000');
+var client = new BinaryClient('ws://'+window.location.hostname+':9001');
 var stream;
 client.on('open', function(){
   stream = client.createStream({room: room, type: 'read'});

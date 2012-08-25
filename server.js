@@ -32,7 +32,7 @@ var BinaryServer = require('binaryjs').BinaryServer;
 var rooms = {};
 
 // Start Binary.js server
-var server = BinaryServer({port: 9000});
+var server = BinaryServer({port: 9001});
 // Wait for new user connections
 server.on('connection', function(client){
   client.on('error', function(e) {
