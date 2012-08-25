@@ -13,7 +13,7 @@ var show = true;
 var asciiWorker = new Worker("/js/jsascii.js");
 asciiWorker.onmessage = draw;
         
-var client = new BinaryClient('ws://localhost:9000');
+var client = new BinaryClient('ws://'+window.location.hostname+':9000');
 var stream;
 client.on('open', function(){
   stream = client.createStream({room: room, type: 'write'});

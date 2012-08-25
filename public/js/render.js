@@ -24,13 +24,11 @@
           var r = b1 & 15;
           var g = b2 >> 4;
           var b = b2 & 15;
-          
-      
-        
+            
           var char = charList[idx];
  
           strChars += "<span style='"
-            + "color:rgb("+r*16+","+g*16+","+b*16+");"
+            + "background-color:rgb("+r*16+","+g*16+","+b*16+");"
             + "'>" + char + char + "</span>";
           
           //strChars += '(' + r + ',' + g +  ',' + b + ',' + idx + ')';

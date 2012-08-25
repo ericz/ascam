@@ -25,19 +25,23 @@
           var g = img[loc+1];
           var b = img[loc+2];
           
+          var rr = Math.floor(r/16);
+          var gr = Math.floor(g/16);
+          var br = Math.floor(b/16);
+          
           var bright = (0.3*r + 0.59*g + 0.11*b) / 255;
           var idx = (cli) - Math.round(bright * (cli));
         
           var char = charList[idx];
  
           strChars += "<span style='"
-            + "color:rgb("+Math.round(r/16)*16+","+Math.round(g/16)*16+","+Math.round(b/16)*16+");"
+            + "color:rgb("+rr*16+","+gr*16+","+br*16+");"
             + "'>" + char + char + "</span>";
             
          // strChars += '(' + r + ',' + g +  ',' + b + ',' + a + ')';
           
-          buf[outLoc] = (idx << 4) + Math.round(r/16);
-          buf[outLoc+1] = (Math.round(g/16) << 4) + Math.round(b/16);
+          buf[outLoc] = (idx << 4) + rr;
+          buf[outLoc+1] = (gr << 4) + br;
         }
         strChars += "\n";
       }
