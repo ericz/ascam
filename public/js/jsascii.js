@@ -1,71 +1,46 @@
 
-    var aDefaultCharList = (" .,:;i1tfLCG08@").split("");
-    var aDefaultColorCharList = (" CGO08@").split("");
-    var strFont = "courier new";
-
-
-    var iScale = 3;
-		var bColor = true;
-		var bAlpha = false;
-		var bBlock = false;
-		var bInvert = false;
-		var strResolution = "medium";
-		var aCharList = (bColor ? aDefaultColorCharList : aDefaultCharList);
-
-		var fResolution = 0.5;
-		/*switch (strResolution) {
-			case "low" : 	fResolution = 0.25; break;
-			case "medium" : fResolution = 0.5; break;
-			case "high" : 	fResolution = 1; break;
-		}*/
-
+    var charList = [" ", ".", ",", ":", ";", "i", "1", "t", "f", "L", "C", "G", "0", "8", "@"];
+   
+    var cli = charList.length-1;
     
-		var iWidth = 160;
-		var iHeight = 120;
+		var w = 100;
+		var h = 75;
 
     this.onmessage = function(event) {
       
     
       var img = event.data;
-    
-      img = img.split("*");
-      var strChars = "";
-
-      for (var y=0;y<iHeight;y+=2) {
-        var data = img[y];
-        var col = data.split(';');
-        for(var i = 0; i < iWidth; i+=1) {
-          var tmp = col[i];
-          var iRed = (tmp >> 16) & 0xff;
-          var iGreen = (tmp >> 8) & 0xff;
-          var iBlue = tmp & 0xff;
-          var iAlpha = 0xff;
-               
       
-      
-          if (iAlpha == 0) {
-            var iBrightIdx = 0;
-          } else {
-            var fBrightness = (0.3*iRed + 0.59*iGreen + 0.11*iBlue) / 255;
-            var iCharIdx = (aCharList.length-1) - Math.round(fBrightness * (aCharList.length-1));
-          }
+      var buf = new Uint8Array(15000);
+      var strChars = '';
+      for (var y = 0; y < h; y++) {
+        var outRow = y*w*2;
+        var row = outRow*2;
+        for(var x = 0; x < w; x++) {
+         
+          var loc = row+x*4;
+          var outLoc = outRow+x*2;
+          
+          var r = img[loc];
+          var g = img[loc+1];
+          var b = img[loc+2];
+          
+          var bright = (0.3*r + 0.59*g + 0.11*b) / 255;
+          var idx = (cli) - Math.round(bright * (cli));
         
-
-      
-          var strThisChar = aCharList[iCharIdx];
-
-          if (strThisChar == " ") 
-            strThisChar = "&nbsp;";
+          var char = charList[idx];
  
           strChars += "<span style='"
-            + "color:rgb("+iRed+","+iGreen+","+iBlue+");"
-            + (bBlock ? "background-color:rgb("+iRed+","+iGreen+","+iBlue+");" : "")
-            + (bAlpha ? "opacity:" + (iAlpha/255) + ";" : "")
-            + "'>" + strThisChar + "</span>";
+            + "color:rgb("+Math.round(r/16)*16+","+Math.round(g/16)*16+","+Math.round(b/16)*16+");"
+            + "'>" + char + char + "</span>";
+            
+         // strChars += '(' + r + ',' + g +  ',' + b + ',' + a + ')';
           
+          buf[outLoc] = (idx << 4) + Math.round(r/16);
+          buf[outLoc+1] = (Math.round(g/16) << 4) + Math.round(b/16);
         }
-        strChars += "<br/>";
+        strChars += "\n";
       }
-      postMessage(strChars);
+      postMessage({str: strChars, buf: buf});
     }
 

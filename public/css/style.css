@@ -3,15 +3,17 @@ a {outline: none;} /* Gets rid of Firefox's dotted borders */
 a img {border: none;} /* Gets rid of IE's blue borders */
 
 #ascii {
-   width: 840px; height: 560px; white-space: pre; letter-spacing: -1.04px; font-family: 'courier new'; font-size: 10px; line-height: 9px; text-align: center; 
-   background-color: #fff;
-   box-shadow: 0px 1px 25px #aec6d3;
-   margin: 0 auto;
+  background-color: #fff;
+  box-shadow: 0px 1px 25px #aec6d3;
+  margin: 0 auto;
+  white-space: pre; 
+  letter-spacing: -1.04px; font-family: 'courier new'; font-size: 9px; line-height: 8px; text-align: center; 
+  visibility: hidden;
 }
 
-
-#camera {
-  margin-top: 200px;
+#last {
+  float: left;
+  visibility: hidden;
 }
 
 html {
@@ -25,8 +27,7 @@ html {
   background: linear-gradient(left, #e5f6ff 0%,#ffffff 100%);
   font-family: "Segoe UI", Helvetica, Arial;
   font-size: 20px;
-  color: #fff;
-  padding-top: 25px;
+  padding-top: 10px;
   font-family: Georgia, Times, “Times New Roman”, serif;
   text-align: center;
 }
